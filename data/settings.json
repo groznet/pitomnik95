@@ -1,0 +1,17 @@
+{
+  "name": "Pitomnik95",
+  "legal_name": "Садовый питомник Pitomnik95",
+  "phone": "8 (928) 393-33-33",
+  "phone_href": "+79283933333",
+  "whatsapp": "https://wa.me/79283933333",
+  "telegram": "https://t.me/ozelenenie_95",
+  "instagram": "https://instagram.com/pitomnik95",
+  "email": "pitomnik95@mail.ru",
+  "hours": "9:00–17:00, без выходных",
+  "since": 2012,
+  "items": 1400,
+  "addresses": [
+    { "label": "Питомник", "text": "Чеченская Республика, трасса Грозный–Аргун, 7 км" },
+    { "label": "Магазин", "text": "Чеченская Республика, ул. Патриса Лумумбы, 56" }
+  ]
+}

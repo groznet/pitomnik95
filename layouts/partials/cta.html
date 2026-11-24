@@ -1,0 +1,20 @@
+{{- $s := hugo.Data.settings -}}
+<section class="relative isolate overflow-hidden bg-primary-dark text-white grain" aria-labelledby="cta-title">
+  {{ partial "wave.html" (dict "fill" "text-primary-dark" "v" 3) }}
+  <div class="absolute inset-0 -z-10">
+    <img data-parallax="0.1" src="{{ partial "img-url.html" (dict "key" "forest-rays" "w" 2000) }}" alt="Солнечные лучи в лесу" loading="lazy" class="h-[120%] w-full object-cover">
+    <div class="absolute inset-0 bg-gradient-to-b from-primary-dark via-primary-dark/80 to-surface-dark/90"></div>
+  </div>
+  {{ partial "botanical.html" (dict "v" "branch" "c" "pointer-events-none absolute -left-12 bottom-0 h-80 text-primary/60 float-slow [--r:6deg]") }}
+  {{ partial "botanical.html" (dict "v" "fern" "c" "pointer-events-none absolute -right-10 top-10 h-96 text-secondary/30 float-slower [--r:-6deg]") }}
+  <div class="container-x relative z-10 py-28 text-center sm:py-36">
+    <p class="eyebrow reveal justify-center">Бесплатный выезд дизайнера</p>
+    <h2 id="cta-title" class="reveal mx-auto mt-5 max-w-3xl text-balance text-4xl sm:text-6xl" style="--d:80ms">Давайте вырастим <span class="serif-accent text-accent">ваш сад</span> вместе</h2>
+    <p class="reveal mx-auto mt-6 max-w-xl text-lg text-white/85" style="--d:160ms">Позвоните или напишите — подберём растения для вашего участка и договоримся о выезде специалиста. Работаем ежедневно, {{ $s.hours }}.</p>
+    <div class="reveal mt-10 flex flex-wrap items-center justify-center gap-3" style="--d:240ms">
+      <a href="tel:{{ $s.phone_href }}" class="btn-accent text-base">{{ partial "icon.html" (dict "n" "phone" "c" "h-5 w-5") }}{{ $s.phone }}</a>
+      <a href="{{ $s.whatsapp }}" target="_blank" rel="noopener" class="btn-glass text-base">{{ partial "icon.html" (dict "n" "whatsapp" "c" "h-5 w-5") }}WhatsApp</a>
+      <a href="{{ $s.telegram }}" target="_blank" rel="noopener" class="btn-glass text-base">{{ partial "icon.html" (dict "n" "telegram" "c" "h-5 w-5") }}Telegram</a>
+    </div>
+  </div>
+</section>

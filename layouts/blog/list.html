@@ -1,0 +1,12 @@
+{{ define "main" }}
+{{ partial "page-hero.html" (dict "title" .Title "lead" .Params.lead "image" .Params.hero "eyebrow" "Блог" "alt" "Молодые побеги крупным планом" "crumbs" (slice (dict "title" "Блог"))) }}
+<section class="sun-gradient relative overflow-hidden pb-32 pt-8">
+  {{ partial "botanical.html" (dict "v" "branch" "c" "pointer-events-none absolute -right-14 top-10 h-96 text-secondary/10 float-slow [--r:10deg]") }}
+  <div class="container-x relative z-10">
+    <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
+      {{- range $i, $p := .Pages.ByDate.Reverse }}{{ partial "blog-card.html" (dict "p" $p "i" $i) }}{{ end }}
+    </div>
+  </div>
+</section>
+{{ partial "cta.html" . }}
+{{ end }}

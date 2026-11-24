@@ -1,0 +1,45 @@
+{{ define "main" }}
+{{ partial "page-hero.html" (dict "title" .Title "lead" .Params.summary "image" .Params.after_image "eyebrow" (printf "Проект · %s" (.Date.Format "2006")) "alt" .Title "crumbs" (slice (dict "title" "Проекты" "url" "/projects/") (dict "title" .Title))) }}
+<section class="sun-gradient relative overflow-hidden pb-24 pt-8">
+  <div class="container-x relative z-10">
+    <dl class="reveal grid grid-cols-2 gap-6 rounded-[2.5rem_1rem_2.5rem_1rem] bg-white p-7 shadow-botanical sm:grid-cols-4">
+      <div><dt class="text-xs uppercase tracking-widest text-muted">Локация</dt><dd class="mt-1 font-heading font-semibold text-primary">{{ .Params.location }}</dd></div>
+      <div><dt class="text-xs uppercase tracking-widest text-muted">Год</dt><dd class="mt-1 font-heading font-semibold text-primary">{{ .Date.Format "2006" }}</dd></div>
+      <div><dt class="text-xs uppercase tracking-widest text-muted">Площадь</dt><dd class="mt-1 font-heading font-semibold text-primary">{{ .Params.area }}</dd></div>
+      <div><dt class="text-xs uppercase tracking-widest text-muted">Услуги</dt><dd class="mt-1 text-sm font-semibold text-primary">
+        {{- range $i, $sv := .Params.services }}{{ with site.GetPage (printf "/services/%s" $sv) }}{{ if $i }}, {{ end }}<a class="underline decoration-accent underline-offset-4" href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}{{ end }}</dd></div>
+    </dl>
+    <div class="reveal mt-12" style="--d:100ms">{{ partial "before-after.html" (dict "before" .Params.before_image "after" .Params.after_image "alt" .Title) }}</div>
+    <p class="mt-3 text-sm text-muted">Потяните слайдер, чтобы сравнить состояние до и после.</p>
+    {{- if .Params.demo }}<p class="mt-4 rounded-3xl bg-primary/10 px-5 py-3 text-sm text-primary">Демонстрационный проект: фото и описание будут заменены реальными материалами питомника.</p>{{ end }}
+    <div class="reveal prose-p95 mt-16">{{ .Content }}</div>
+  </div>
+</section>
+
+{{- with .Params.gallery }}
+<section class="relative bg-surface pb-28" x-data="lightbox">
+  <div class="container-x">
+    <h2 class="reveal text-3xl text-primary">Галерея проекта</h2>
+    <div class="mt-8 grid gap-4 sm:grid-cols-3">
+      {{- range $i, $g := . }}
+      <button type="button" class="card-organic reveal aspect-[4/3] rounded-[2rem]" style="--d:{{ mul $i 90 }}ms" @click="show('{{ partial "img-url.html" (dict "key" $g "w" 1800) }}', 'Фото проекта {{ add $i 1 }}')" aria-label="Открыть фото {{ add $i 1 }}"><img src="{{ partial "img-url.html" (dict "key" $g "w" 800) }}" alt="Фото проекта {{ add $i 1 }}" loading="lazy" class="h-full w-full object-cover"></button>
+      {{- end }}
+    </div>
+    {{ partial "lightbox.html" . }}
+  </div>
+</section>
+{{- end }}
+
+{{- $related := where (where site.RegularPages "Section" "projects") "Title" "ne" .Title }}
+{{- if $related }}
+<section class="relative bg-surface pb-28">
+  <div class="container-x">
+    <h2 class="reveal text-3xl text-primary">Другие проекты</h2>
+    <div class="mt-8 grid gap-6 sm:grid-cols-2">
+      {{- range first 2 $related }}<a href="{{ .RelPermalink }}" class="card-organic reveal group aspect-[16/9] isolate block"><img src="{{ partial "img-url.html" (dict "key" .Params.after_image "w" 1000) }}" alt="{{ .Title }}" loading="lazy" class="h-full w-full object-cover"><span class="absolute inset-0 bg-gradient-to-t from-surface-dark/90 to-transparent"></span><span class="absolute bottom-5 left-6 font-heading text-xl text-white">{{ .Title }}</span></a>{{ end }}
+    </div>
+  </div>
+</section>
+{{- end }}
+{{ partial "cta.html" . }}
+{{ end }}

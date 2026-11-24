@@ -1,0 +1,15 @@
+{
+  "name": "pitomnik95",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Pitomnik95 — Hugo static site",
+  "scripts": {
+    "css": "tailwindcss -i ./assets/css/main.css -o ./static/css/site.css --minify",
+    "css:watch": "tailwindcss -i ./assets/css/main.css -o ./static/css/site.css --watch",
+    "dev": "npm run css && hugo server -D",
+    "build": "npm run css && hugo --gc --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  }
+}

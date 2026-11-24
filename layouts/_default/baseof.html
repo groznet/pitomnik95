@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  {{ partial "head.html" . }}
+</head>
+<body class="min-h-screen bg-surface">
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-accent focus:px-5 focus:py-2 focus:text-surface-dark">К содержимому</a>
+  {{ partial "header.html" . }}
+  <main id="main">
+    {{ block "main" . }}{{ end }}
+  </main>
+  {{ partial "footer.html" . }}
+</body>
+</html>

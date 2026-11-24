@@ -1,0 +1,6 @@
+<a href="{{ .p.RelPermalink }}" class="group reveal block" style="--d:{{ mul .i 100 }}ms">
+  <div class="card-organic aspect-[4/3]"><img src="{{ partial "img-url.html" (dict "key" .p.Params.hero "w" 900) }}" alt="{{ .p.Title }}" loading="lazy" class="h-full w-full object-cover"></div>
+  <p class="mt-5 text-xs font-semibold uppercase tracking-widest text-secondary">{{ .p.Date.Format "02.01.2006" }}{{ with .p.Params.category }} · {{ . }}{{ end }}</p>
+  <h3 class="mt-2 font-heading text-xl text-primary group-hover:text-secondary">{{ .p.Title }}</h3>
+  <p class="mt-2 text-sm text-surface-dark/75">{{ .p.Params.description }}</p>
+</a>

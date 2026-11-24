@@ -1,0 +1,4 @@
+{{ define "main" }}
+{{ partial "page-hero.html" (dict "title" .Title "lead" .Params.lead "image" (.Params.hero | default "hero") "alt" .Title) }}
+<section class="relative bg-surface pb-28 pt-8"><div class="container-x"><ul class="space-y-3">{{ range .Pages }}<li><a class="text-primary underline" href="{{ .RelPermalink }}">{{ .Title }}</a></li>{{ end }}</ul></div></section>
+{{ end }}

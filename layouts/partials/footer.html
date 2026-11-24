@@ -1,0 +1,62 @@
+{{- $s := hugo.Data.settings -}}
+{{- $nav := hugo.Data.nav -}}
+<footer class="relative isolate overflow-hidden bg-surface-dark text-white/80 grain">
+  <div class="canopy-gradient absolute inset-0 -z-10"></div>
+  {{ partial "wave.html" (dict "fill" "text-surface-dark" "v" 1 "h" "h-12 sm:h-16") }}
+  {{ partial "botanical.html" (dict "v" "fern" "c" "pointer-events-none absolute -bottom-10 -right-10 h-[28rem] text-secondary/15 float-slower [--r:8deg]") }}
+  {{ partial "botanical.html" (dict "v" "leaf" "c" "pointer-events-none absolute -left-8 top-24 h-52 text-accent/10 float-slow [--r:-12deg]") }}
+  <div class="container-x relative z-10 pb-10 pt-20">
+    <div class="grid gap-12 lg:grid-cols-[1.3fr_1fr_1fr_1.2fr]">
+      <div>
+        <a href="{{ "/" | relURL }}" class="text-white" aria-label="Pitomnik95">{{ partial "logo.html" . }}</a>
+        <p class="mt-6 max-w-sm text-sm leading-relaxed">Садовый питомник и центр с {{ $s.since }} года. Более {{ $s.items }} наименований декоративных и плодовых растений, хвойные, газоны и садовая техника STIHL.</p>
+        <div class="mt-6 flex gap-2">
+          <a href="{{ $s.whatsapp }}" target="_blank" rel="noopener" aria-label="WhatsApp" class="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white transition hover:scale-105 hover:bg-accent hover:text-surface-dark">{{ partial "icon.html" (dict "n" "whatsapp") }}</a>
+          <a href="{{ $s.telegram }}" target="_blank" rel="noopener" aria-label="Telegram" class="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white transition hover:scale-105 hover:bg-accent hover:text-surface-dark">{{ partial "icon.html" (dict "n" "telegram") }}</a>
+          <a href="{{ $s.instagram }}" target="_blank" rel="noopener" aria-label="Instagram" class="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white transition hover:scale-105 hover:bg-accent hover:text-surface-dark">{{ partial "icon.html" (dict "n" "instagram") }}</a>
+        </div>
+      </div>
+      <nav aria-label="Каталог">
+        <h2 class="font-heading text-sm font-semibold uppercase tracking-[.2em] text-accent">Каталог</h2>
+        <ul class="mt-5 space-y-2.5 text-sm">
+          {{- range $nav.categories }}<li><a class="transition hover:text-accent" href="{{ printf "/catalog/%s/" .slug | relURL }}">{{ .title }}</a></li>{{ end }}
+        </ul>
+      </nav>
+      <nav aria-label="Компания">
+        <h2 class="font-heading text-sm font-semibold uppercase tracking-[.2em] text-accent">Питомник</h2>
+        <ul class="mt-5 space-y-2.5 text-sm">
+          {{- range slice (dict "t" "Услуги" "u" "/services/") (dict "t" "Проекты" "u" "/projects/") (dict "t" "Галерея" "u" "/gallery/") (dict "t" "О питомнике" "u" "/about/") (dict "t" "Партнёры" "u" "/partners/") (dict "t" "Блог" "u" "/blog/") (dict "t" "Вопросы и ответы" "u" "/faq/") (dict "t" "Контакты" "u" "/contact/") }}
+          <li><a class="transition hover:text-accent" href="{{ .u | relURL }}">{{ .t }}</a></li>{{ end }}
+        </ul>
+      </nav>
+      <address class="not-italic">
+        <h2 class="font-heading text-sm font-semibold uppercase tracking-[.2em] text-accent">Контакты</h2>
+        <ul class="mt-5 space-y-4 text-sm">
+          <li class="flex gap-3">{{ partial "icon.html" (dict "n" "phone" "c" "mt-0.5 h-5 w-5 shrink-0 text-accent") }}<a class="font-heading text-base font-semibold text-white hover:text-accent" href="tel:{{ $s.phone_href }}">{{ $s.phone }}</a></li>
+          <li class="flex gap-3">{{ partial "icon.html" (dict "n" "mail" "c" "mt-0.5 h-5 w-5 shrink-0 text-accent") }}<a class="hover:text-accent" href="mailto:{{ $s.email }}">{{ $s.email }}</a></li>
+          {{- range $s.addresses }}<li class="flex gap-3">{{ partial "icon.html" (dict "n" "pin" "c" "mt-0.5 h-5 w-5 shrink-0 text-accent") }}<span>{{ .text }}</span></li>{{ end }}
+          <li class="flex gap-3">{{ partial "icon.html" (dict "n" "clock" "c" "mt-0.5 h-5 w-5 shrink-0 text-accent") }}<span>{{ $s.hours }}</span></li>
+        </ul>
+      </address>
+    </div>
+    <div class="mt-14 flex flex-col items-start justify-between gap-4 border-t border-white/10 pt-6 text-xs text-white/60 sm:flex-row sm:items-center">
+      <p>© {{ now.Year }} {{ $s.legal_name }}. Все права защищены.</p>
+      <ul class="flex flex-wrap gap-x-6 gap-y-2">
+        <li><a class="hover:text-accent" href="{{ "/privacy/" | relURL }}">Политика конфиденциальности</a></li>
+        <li><a class="hover:text-accent" href="{{ "/terms/" | relURL }}">Пользовательское соглашение</a></li>
+        <li>Поддержка сайта <a class="hover:text-accent" href="https://groznet.com" target="_blank" rel="noopener">GrozNet</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+{{- if and hugo.IsProduction (ne site.Params.ym_id "XXXXXXXX") (site.Params.ym_id) }}
+<!-- Yandex.Metrika counter -->
+<script>
+(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");
+ym({{ site.Params.ym_id }}, "init", {clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/{{ site.Params.ym_id }}" style="position:absolute; left:-9999px;" alt=""></div></noscript>
+<!-- /Yandex.Metrika counter -->
+{{- else }}
+<!-- Yandex.Metrika: set params.ym_id in hugo.toml (rendered in production builds only) -->
+{{- end }}

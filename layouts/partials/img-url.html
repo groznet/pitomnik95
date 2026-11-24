@@ -1,0 +1,8 @@
+{{- /* Resolves an image key (data/images.json) or raw Unsplash id to a URL.
+       Production: set params.media_base to https://files.groznet.com/pitomnik95/ and URLs become media_base + key + ".webp" */ -}}
+{{- $key := .key -}}
+{{- $w := .w | default 1200 -}}
+{{- $id := index hugo.Data.images $key | default $key -}}
+{{- $url := printf "https://images.unsplash.com/photo-%s?auto=format&fit=crop&w=%d&q=75" $id $w -}}
+{{- with site.Params.media_base }}{{ $url = printf "%s%s.webp" . $key }}{{ end -}}
+{{- return $url -}}

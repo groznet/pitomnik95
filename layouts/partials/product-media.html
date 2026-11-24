@@ -1,0 +1,22 @@
+{{- /* Single source of product image addresses: the bundle's media.json.
+       media.json = { remote_base_url, featured_image, images[] (filenames) }.
+       mode "remote" (default in production): remote_base_url + filename  → files.groznet.com
+       mode "local"  (default in dev):         same filenames, served from the local bundle's images/ folder
+       Override with params.media_mode = "local" | "remote".
+       Returns dict: featured (URL, first photo or a placeholder), images (real photos), all (always >= 1 URL), has_photo. */ -}}
+{{- $mode := site.Params.media_mode | default (cond hugo.IsProduction "remote" "local") -}}
+{{- $m := dict -}}
+{{- with .Resources.Get "media.json" }}{{ $m = . | transform.Unmarshal }}{{ end -}}
+{{- $images := slice -}}
+{{- if eq $mode "local" -}}
+  {{- $dir := .RelPermalink -}}
+  {{- range .Resources.ByType "image" }}{{ $_ := .Publish }}{{ end -}}
+  {{- range $m.images }}{{ $images = $images | append (printf "%simages/%s" $dir .) }}{{ end -}}
+{{- else -}}
+  {{- range $m.images }}{{ $images = $images | append (printf "%s%s" $m.remote_base_url .) }}{{ end -}}
+{{- end -}}
+{{- $placeholder := partial "img-url.html" (dict "key" "seedling-macro" "w" 1200) -}}
+{{- $has := gt (len $images) 0 -}}
+{{- $featured := cond $has (index $images 0) $placeholder -}}
+{{- $all := cond $has $images (slice $placeholder) -}}
+{{- return (dict "featured" $featured "images" $images "all" $all "has_photo" $has) -}}

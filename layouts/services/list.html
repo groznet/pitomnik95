@@ -1,0 +1,21 @@
+{{ define "main" }}
+{{ partial "page-hero.html" (dict "title" .Title "lead" .Params.lead "image" .Params.hero "eyebrow" "Услуги" "alt" "Сад с розами и дорожкой" "crumbs" (slice (dict "title" "Услуги"))) }}
+<section class="sun-gradient relative overflow-hidden pb-32 pt-8">
+  {{ partial "botanical.html" (dict "v" "fern" "c" "pointer-events-none absolute -right-14 top-10 h-[30rem] text-secondary/10 float-slow") }}
+  <div class="container-x relative z-10 space-y-16 lg:space-y-24">
+    {{- range $i, $p := .Pages }}
+    <article class="grid items-center gap-10 lg:grid-cols-2">
+      <div class="reveal {{ if eq (mod $i 2) 1 }}reveal-right lg:order-2{{ else }}reveal-left{{ end }} card-organic aspect-[4/3] rounded-[3rem_1rem_3rem_1rem]"><img src="{{ partial "img-url.html" (dict "key" $p.Params.hero "w" 1200) }}" alt="{{ $p.Title }}" loading="lazy" class="h-full w-full object-cover"></div>
+      <div class="reveal {{ if eq (mod $i 2) 1 }}lg:order-1{{ end }}" style="--d:120ms">
+        <p class="eyebrow eyebrow-dark">Услуга {{ add $i 1 }}</p>
+        <h2 class="mt-4 text-3xl text-primary sm:text-5xl">{{ $p.Title }}</h2>
+        <p class="mt-4 text-lg text-surface-dark/80">{{ $p.Params.lead }}</p>
+        <ul class="mt-6 space-y-2">{{ range first 3 $p.Params.includes }}<li class="flex items-center gap-3"><span class="grid h-6 w-6 place-items-center rounded-full bg-primary text-accent">{{ partial "icon.html" (dict "n" "check" "c" "h-3.5 w-3.5") }}</span>{{ . }}</li>{{ end }}</ul>
+        <a href="{{ $p.RelPermalink }}" class="btn-forest mt-8">Подробнее {{ partial "icon.html" (dict "n" "arrow" "c" "h-4 w-4") }}</a>
+      </div>
+    </article>
+    {{- end }}
+  </div>
+</section>
+{{ partial "cta.html" . }}
+{{ end }}

@@ -1,0 +1,10 @@
+{{- /* Organic wave divider. Params: fill (tailwind text-* class), v (1-3), flip (bool), h (tailwind height classes)
+       Place at the TOP of a section, filled with that section's top colour, so it overlaps the section above. */ -}}
+{{- $v := .v | default 1 -}}
+<div class="pointer-events-none absolute inset-x-0 top-0 z-[3] -translate-y-[calc(100%-1px)] {{ .fill | default "text-surface" }}" aria-hidden="true">
+  <svg class="block w-full {{ .h | default "h-14 sm:h-20 lg:h-28" }}{{ if .flip }} -scale-x-100{{ end }}" viewBox="0 0 1440 120" preserveAspectRatio="none" fill="currentColor">
+    {{- if eq $v 1 }}<path d="M0,64 C240,120 480,0 720,48 C960,96 1200,16 1440,64 L1440,121 L0,121Z"/>
+    {{- else if eq $v 2 }}<path d="M0,32 C180,96 360,96 540,48 C760,-10 1000,20 1200,70 C1320,95 1400,70 1440,50 L1440,121 L0,121Z"/>
+    {{- else }}<path d="M0,80 C120,20 320,10 520,60 C720,110 900,100 1100,40 C1250,0 1360,30 1440,70 L1440,121 L0,121Z"/>{{ end -}}
+  </svg>
+</div>

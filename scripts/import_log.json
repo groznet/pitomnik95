@@ -1,0 +1,14 @@
+{
+  "total": 574,
+  "success": 134,
+  "failed": [
+    {
+      "url": "https://rozovsad.ru/catalog?page=57",
+      "error": "no product links found on listing page"
+    },
+    {
+      "url": "https://rozovsad.ru/catalog/vishiesya-rasteniya/product1915",
+      "error": "404 Client Error: Not Found for url: https://rozovsad.ru/storage/app/media/catalog/trahelospermum_malenkij-qy1rq3jlba.jpg"
+    }
+  ]
+}

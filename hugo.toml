@@ -1,0 +1,38 @@
+baseURL = "https://pitomnik95.ru/"
+locale = "ru-RU"
+defaultContentLanguage = "ru"
+title = "Pitomnik95 — садовый питомник и центр в Чеченской Республике"
+enableRobotsTXT = true
+disableKinds = ["taxonomy", "term", "RSS"]
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+  # NOTE: the `services` taxonomy from CLAUDE.md would collide with the /services/ section
+  # (same URLs). Services are linked from projects via the `services:` front matter list instead.
+
+[permalinks.page]
+  projects = "/projects/:year/:month/:slug/"
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[outputs]
+  home = ["HTML"]
+
+[params]
+  description = "Садовый питомник Pitomnik95: более 1400 наименований декоративных и плодовых растений, хвойные, газоны, садовая техника STIHL. Ландшафтный дизайн, доставка по Чеченской Республике."
+  since = 2012
+  # <meta name="theme-color"> requires a literal colour (cannot use CSS variables); keep equal to --primary-dark
+  theme_color = "#123023"
+  # Yandex Metrika: replace with the real counter ID; the script is rendered only in production builds.
+  ym_id = "XXXXXXXX"
+  # Production media: set to "https://files.groznet.com/pitomnik95/" once media is uploaded (see README).
+  media_base = ""   # site-wide imagery only (heroes, services, blog); product images use each bundle's media.json
+  # Product images: "local" (bundle files) or "remote" (media.json base URL, files.groznet.com).
+  # Default: local in `hugo server`/dev builds, remote in production builds. Uncomment to force:
+  # media_mode = "local"
+
+[sitemap]
+  changefreq = "monthly"
+  priority = 0.5

@@ -1,0 +1,25 @@
+{{- /* Params: title, lead, image (key), eyebrow, crumbs (slice of dict title/url), tall (bool) */ -}}
+<section class="relative isolate overflow-hidden bg-surface-dark text-white {{ if .tall }}min-h-[78vh]{{ else if .compact }}min-h-[48vh]{{ else }}min-h-[62vh]{{ end }} flex items-end grain">
+  <div class="absolute inset-0 -z-10">
+    <img data-parallax="0.12" src="{{ if .src }}{{ .src }}{{ else }}{{ partial "img-url.html" (dict "key" .image "w" 2000) }}{{ end }}" alt="{{ .alt | default "Атмосферная садовая фотография" }}" class="ken-burns h-[118%] w-full object-cover" fetchpriority="high">
+    <div class="absolute inset-0 bg-gradient-to-t from-surface-dark via-surface-dark/55 to-surface-dark/40"></div>
+    <div class="absolute inset-0 sun-glow"></div>
+  </div>
+  {{ partial "botanical.html" (dict "v" "branch" "c" "pointer-events-none absolute -left-10 top-20 h-72 text-primary-dark/80 float-slow [--r:-8deg] hidden sm:block") }}
+  {{ partial "botanical.html" (dict "v" "fern" "c" "pointer-events-none absolute -right-12 bottom-10 h-96 text-surface-dark/70 float-slower [--r:10deg]") }}
+  <div class="container-x relative z-10 {{ if .compact }}pb-20 pt-36 sm:pb-24{{ else }}pb-24 pt-44 sm:pb-32{{ end }}">
+    {{- with .crumbs }}
+    <nav aria-label="Хлебные крошки" class="reveal mb-6 text-sm text-white/80">
+      <ol class="flex flex-wrap items-center gap-2">
+        <li><a href="{{ "/" | relURL }}" class="hover:text-accent">Главная</a></li>
+        {{- range . }}<li class="flex items-center gap-2"><span aria-hidden="true">/</span>{{ if .url }}<a href="{{ .url | relURL }}" class="hover:text-accent">{{ .title }}</a>{{ else }}<span class="text-white">{{ .title }}</span>{{ end }}</li>{{ end }}
+      </ol>
+    </nav>
+    {{- end }}
+    {{- with .eyebrow }}<p class="eyebrow reveal mb-5">{{ . }}</p>{{ end }}
+    <h1 class="reveal max-w-4xl text-balance text-4xl sm:text-6xl lg:text-7xl" style="--d:80ms">{{ .title }}</h1>
+    {{- with .lead }}<p class="reveal mt-6 max-w-2xl text-lg text-white/90 sm:text-xl" style="--d:180ms">{{ . }}</p>{{ end }}
+    {{- with .cta }}<div class="reveal mt-9 flex flex-wrap gap-3" style="--d:280ms">{{ . | safeHTML }}</div>{{ end }}
+  </div>
+  <div aria-hidden="true" class="absolute inset-x-0 bottom-0 z-[3] translate-y-px text-surface"><svg class="block h-12 w-full sm:h-20 lg:h-24" viewBox="0 0 1440 120" preserveAspectRatio="none" fill="currentColor"><path d="M0,32 C180,96 360,96 540,48 C760,-10 1000,20 1200,70 C1320,95 1400,70 1440,50 L1440,121 L0,121Z"/></svg></div>
+</section>

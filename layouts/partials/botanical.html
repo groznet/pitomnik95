@@ -1,0 +1,26 @@
+{{- /* Foreground botanical silhouettes. Params: v (leaf|branch|fern), c (classes: position, size, colour, opacity) */ -}}
+{{- if eq .v "leaf" -}}
+<svg class="{{ .c }}" viewBox="0 0 200 300" fill="currentColor" aria-hidden="true">
+  <path d="M100 296C94 222 16 190 16 100 16 40 68 8 100 3c32 5 84 37 84 97 0 90-78 122-84 196z"/>
+  <path d="M100 296V40M100 120 60 84m40 56 46-44m-46 88-34-30m34 62 30-26" class="stroke-surface-dark" stroke-opacity=".18" stroke-width="3" fill="none" stroke-linecap="round"/>
+</svg>
+{{- else if eq .v "branch" -}}
+<svg class="{{ .c }}" viewBox="0 0 400 600" fill="currentColor" aria-hidden="true">
+  <path d="M205 600C190 470 240 310 196 6" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round"/>
+  {{- range $i, $y := slice 540 470 400 330 260 190 120 50 }}
+  {{- $side := cond (eq (mod $i 2) 0) 1 -1 }}
+  {{- $s := sub 1.15 (mul (float $i) 0.09) }}
+  <g transform="translate({{ cond (eq $side 1) 208 202 }} {{ $y }}) scale({{ mul $side $s }} {{ $s }}) rotate(-28)"><path d="M0 0C30-46 110-58 170-8 120 40 40 46 0 0z"/><path d="M6 0 150-10" class="stroke-surface-dark" stroke-opacity=".2" stroke-width="3" fill="none"/></g>
+  {{- end }}
+  <g transform="translate(196 6) rotate(-80) scale(.9)"><path d="M0 0C30-46 110-58 170-8 120 40 40 46 0 0z"/></g>
+</svg>
+{{- else if eq .v "fern" -}}
+<svg class="{{ .c }}" viewBox="0 0 400 600" fill="currentColor" aria-hidden="true">
+  <path d="M200 600C196 420 214 220 200 20" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round"/>
+  {{- range $i := seq 0 16 }}
+  {{- $y := sub 575 (mul $i 32) }}
+  {{- $s := sub 1.0 (mul (float $i) 0.052) }}
+  <g transform="translate(200 {{ $y }}) scale({{ $s }})"><path transform="rotate(-38)" d="M0 0C30-18 90-22 140 0 90 20 30 18 0 0z"/><path transform="scale(-1 1) rotate(-38)" d="M0 0C30-18 90-22 140 0 90 20 30 18 0 0z"/></g>
+  {{- end }}
+</svg>
+{{- end -}}

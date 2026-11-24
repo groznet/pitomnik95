@@ -1,0 +1,18 @@
+{{ define "main" }}
+{{ partial "page-hero.html" (dict "title" .Title "lead" .Params.lead "image" .Params.hero "eyebrow" "FAQ" "alt" "Туманный лес" "crumbs" (slice (dict "title" "Вопросы и ответы"))) }}
+<section class="sun-gradient relative overflow-hidden pb-32 pt-8">
+  {{ partial "botanical.html" (dict "v" "leaf" "c" "pointer-events-none absolute -right-6 top-10 h-72 text-secondary/10 float-slow [--r:15deg]") }}
+  <div class="container-x relative z-10">
+    <div x-data="{ open: 0 }" class="space-y-3">
+      {{- range $i, $f := hugo.Data.faq.items }}
+      <div class="reveal overflow-hidden rounded-[1.75rem] bg-white shadow-botanical">
+        <h2><button type="button" class="flex w-full items-center justify-between gap-4 px-6 py-5 text-left font-heading text-base font-semibold text-primary" @click="open = open === {{ $i }} ? null : {{ $i }}" :aria-expanded="open === {{ $i }}">{{ $f.q }}<span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-accent/25 transition" :class="open === {{ $i }} && 'rotate-45'">{{ partial "icon.html" (dict "n" "plus" "c" "h-4 w-4") }}</span></button></h2>
+        <div x-show="open === {{ $i }}" x-transition x-cloak class="px-6 pb-6 text-surface-dark/80">{{ $f.a }}</div>
+      </div>
+      {{- end }}
+    </div>
+  </div>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{{ range $i, $f := hugo.Data.faq.items }}{{ if $i }},{{ end }}{"@type":"Question","name":{{ $f.q | jsonify }},"acceptedAnswer":{"@type":"Answer","text":{{ $f.a | jsonify }}}}{{ end }}]}</script>
+</section>
+{{ partial "cta.html" . }}
+{{ end }}

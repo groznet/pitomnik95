@@ -1,0 +1,9 @@
+{{ define "main" }}
+{{ partial "page-hero.html" (dict "title" .Title "lead" .Params.lead "image" .Params.hero "eyebrow" "Документы" "alt" "Тёмная листва" "crumbs" (slice (dict "title" .Title))) }}
+<section class="relative bg-surface pb-28 pt-8">
+  <div class="container-x"><div class="prose-p95">
+    <p class="text-sm text-muted">Редакция от {{ .Params.updated }}</p>
+    {{ .Content }}
+  </div></div>
+</section>
+{{ end }}

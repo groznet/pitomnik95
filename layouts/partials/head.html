@@ -1,0 +1,29 @@
+{{- $title := cond .IsHome site.Title (printf "%s — Pitomnik95" .Title) -}}
+{{- $desc := .Params.description | default site.Params.description -}}
+{{- if and .IsPage (eq .Type "catalog") (not .Params.description) -}}
+  {{- $lat := "" }}{{ with .Params.latin_name }}{{ $lat = printf " (%s)" . }}{{ end -}}
+  {{- $pr := "" }}{{ with .Params.price_label }}{{ $pr = printf " %s." . }}{{ end -}}
+  {{- $desc = printf "%s%s — купить в питомнике Pitomnik95, Чеченская Республика.%s Доставка по республике и самовывоз." .Title $lat $pr -}}
+{{- end -}}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ $title }}</title>
+<meta name="description" content="{{ $desc }}">
+<link rel="canonical" href="{{ .Permalink }}">
+<meta name="theme-color" content="{{ site.Params.theme_color }}">
+<meta property="og:type" content="{{ cond (eq .Section "blog") "article" "website" }}">
+<meta property="og:site_name" content="Pitomnik95">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="{{ $title }}">
+<meta property="og:description" content="{{ $desc }}">
+<meta property="og:url" content="{{ .Permalink }}">
+{{- if and (eq .Section "catalog") .IsPage }}<meta property="og:image" content="{{ (partial "product-media.html" .).featured | absURL }}">{{ else }}{{ with .Params.hero }}<meta property="og:image" content="{{ partial "img-url.html" (dict "key" . "w" 1200) }}">{{ end }}{{ end }}
+<link rel="icon" href="{{ "favicon.svg" | relURL }}" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@300;400;500;600&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ "css/site.css" | relURL }}">
+{{ $js := resources.Get "js/main.js" | minify | fingerprint }}
+<script src="{{ $js.RelPermalink }}" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js" defer></script>

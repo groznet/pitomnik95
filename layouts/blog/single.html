@@ -1,0 +1,16 @@
+{{ define "main" }}
+{{ partial "page-hero.html" (dict "title" .Title "image" .Params.hero "eyebrow" (printf "%s · %s" (.Date.Format "02.01.2006") .Params.category) "alt" .Title "crumbs" (slice (dict "title" "Блог" "url" "/blog/") (dict "title" "Статья"))) }}
+<article class="sun-gradient relative overflow-hidden pb-28 pt-8">
+  {{ partial "botanical.html" (dict "v" "leaf" "c" "pointer-events-none absolute -right-8 top-10 h-72 text-secondary/10 float-slow [--r:15deg]") }}
+  <div class="container-x relative z-10">
+    {{- if .Params.demo }}<p class="mb-10 rounded-3xl bg-primary/10 px-5 py-3 text-sm text-primary">Пример статьи для макета блога: содержание общего характера, будет заменено материалами питомника.</p>{{ end }}
+    <div class="prose-p95">{{ .Content }}</div>
+    <div class="mt-14 flex flex-wrap items-center justify-between gap-4 rounded-[2.5rem_1rem_2.5rem_1rem] bg-primary p-7 text-white shadow-botanical">
+      <p class="font-heading text-lg">Нужна помощь с выбором растений?</p>
+      <a href="{{ hugo.Data.settings.whatsapp }}" target="_blank" rel="noopener" class="btn-accent">{{ partial "icon.html" (dict "n" "whatsapp" "c" "h-5 w-5") }}Написать в WhatsApp</a>
+    </div>
+    <p class="mt-10"><a href="{{ "/blog/" | relURL }}" class="font-semibold text-primary underline decoration-accent decoration-2 underline-offset-4">← Все статьи</a></p>
+  </div>
+</article>
+{{ partial "cta.html" . }}
+{{ end }}

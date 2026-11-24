@@ -1,0 +1,17 @@
+# Build output & tooling
+public/
+resources/
+node_modules/
+.hugo_build.lock
+
+# Product media is stored locally and served from files.groznet.com — never committed.
+# media.json (filenames + remote base URL) IS committed.
+content/**/images/
+content/catalog/**/*.jpg
+content/catalog/**/*.jpeg
+content/catalog/**/*.png
+content/catalog/**/*.webp
+content/catalog/**/*.avif
+
+# Imported product images (rozovsad.ru import)
+content/catalog/**/images/

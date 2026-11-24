@@ -1,0 +1,79 @@
+{{- $nav := hugo.Data.nav -}}
+{{- $s := hugo.Data.settings -}}
+<header x-data="siteHeader" @keydown.escape.window="mobile = false; open = null"
+  :class="scrolled ? 'bg-primary-dark/92 py-2 shadow-botanical backdrop-blur-xl' : 'bg-gradient-to-b from-surface-dark/70 to-transparent py-4'"
+  class="fixed inset-x-0 top-0 z-50 text-white transition-all duration-500">
+  <div class="container-x flex items-center justify-between gap-6">
+    <a href="{{ "/" | relURL }}" class="shrink-0" aria-label="Pitomnik95 — на главную">{{ partial "logo.html" . }}</a>
+
+    <nav class="hidden lg:block" aria-label="Основная навигация">
+      <ul class="flex items-center gap-1">
+        {{- range $nav.main }}
+        {{- $kids := slice }}
+        {{- if eq (printf "%v" .children) "catalog" }}
+          {{- range $nav.categories }}{{ $kids = $kids | append (dict "title" .title "url" (printf "/catalog/%s/" .slug)) }}{{ end }}
+        {{- else if .children }}{{ $kids = .children }}{{ end }}
+        <li class="relative" {{ if $kids }}@mouseenter="open = '{{ .title }}'" @mouseleave="open = null"{{ end }}>
+          {{- if $kids }}
+          <a href="{{ .url | relURL }}" class="flex items-center gap-1 rounded-full px-4 py-2 font-heading text-sm font-medium transition hover:bg-white/10 hover:text-accent" @focus="open = '{{ .title }}'" aria-haspopup="true" :aria-expanded="open === '{{ .title }}'">
+            {{ .title }}{{ partial "icon.html" (dict "n" "chevron" "c" "h-3.5 w-3.5 transition") }}
+          </a>
+          <div x-show="open === '{{ .title }}'" x-cloak x-transition.opacity.duration.200ms class="absolute left-0 top-full w-72 pt-3">
+            <ul class="overflow-hidden rounded-[1.75rem] bg-primary-dark/95 p-2 shadow-botanical ring-1 ring-white/10 backdrop-blur-xl">
+              {{- range $kids }}
+              <li><a href="{{ .url | relURL }}" class="block rounded-2xl px-4 py-2.5 text-sm text-white/90 transition hover:bg-white/10 hover:text-accent">{{ .title }}</a></li>
+              {{- end }}
+            </ul>
+          </div>
+          {{- else }}
+          <a href="{{ .url | relURL }}" class="block rounded-full px-4 py-2 font-heading text-sm font-medium transition hover:bg-white/10 hover:text-accent">{{ .title }}</a>
+          {{- end }}
+        </li>
+        {{- end }}
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <a href="tel:{{ $s.phone_href }}" class="hidden items-center gap-2 rounded-full px-3 py-2 font-heading text-sm font-semibold transition hover:text-accent xl:flex">{{ partial "icon.html" (dict "n" "phone" "c" "h-4 w-4") }}{{ $s.phone }}</a>
+      <a href="{{ $s.whatsapp }}" target="_blank" rel="noopener" aria-label="WhatsApp" class="grid h-10 w-10 place-items-center rounded-full bg-white/10 transition hover:scale-105 hover:bg-accent hover:text-surface-dark">{{ partial "icon.html" (dict "n" "whatsapp" "c" "h-5 w-5") }}</a>
+      <a href="{{ $s.telegram }}" target="_blank" rel="noopener" aria-label="Telegram" class="grid h-10 w-10 place-items-center rounded-full bg-white/10 transition hover:scale-105 hover:bg-accent hover:text-surface-dark">{{ partial "icon.html" (dict "n" "telegram" "c" "h-5 w-5") }}</a>
+      <button type="button" class="grid h-11 w-11 place-items-center rounded-full bg-accent text-surface-dark lg:hidden" @click="mobile = true" aria-label="Открыть меню" :aria-expanded="mobile">{{ partial "icon.html" (dict "n" "menu" "c" "h-6 w-6") }}</button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div x-show="mobile" x-cloak x-transition.opacity class="fixed inset-0 z-[60] overflow-y-auto bg-surface-dark text-white lg:hidden" role="dialog" aria-modal="true" aria-label="Меню">
+    <div class="canopy-gradient grain relative min-h-full px-5 pb-10 pt-4">
+      {{ partial "botanical.html" (dict "v" "fern" "c" "pointer-events-none absolute -right-16 bottom-0 h-[70%] text-secondary/20 float-slow") }}
+      <div class="relative z-10 flex items-center justify-between">
+        <a href="{{ "/" | relURL }}">{{ partial "logo.html" . }}</a>
+        <button type="button" class="grid h-11 w-11 place-items-center rounded-full bg-white/10" @click="mobile = false" aria-label="Закрыть меню">{{ partial "icon.html" (dict "n" "close" "c" "h-6 w-6") }}</button>
+      </div>
+      <ul class="relative z-10 mt-10 space-y-1">
+        {{- range $nav.main }}
+        {{- $kids := slice }}
+        {{- if eq (printf "%v" .children) "catalog" }}
+          {{- range $nav.categories }}{{ $kids = $kids | append (dict "title" .title "url" (printf "/catalog/%s/" .slug)) }}{{ end }}
+        {{- else if .children }}{{ $kids = .children }}{{ end }}
+        <li x-data="{ sub: false }">
+          {{- if $kids }}
+          <div class="flex items-center justify-between">
+            <a href="{{ .url | relURL }}" class="py-3 font-heading text-2xl font-semibold">{{ .title }}</a>
+            <button type="button" class="grid h-10 w-10 place-items-center rounded-full bg-white/10" @click="sub = !sub" :aria-expanded="sub" aria-label="Раскрыть {{ .title }}"><span :class="sub && 'rotate-180'" class="transition">{{ partial "icon.html" (dict "n" "chevron" "c" "h-5 w-5") }}</span></button>
+          </div>
+          <ul x-show="sub" x-transition x-cloak class="mb-2 space-y-1 border-l-2 border-accent/50 pl-4">
+            {{- range $kids }}<li><a href="{{ .url | relURL }}" class="block py-1.5 text-white/80 hover:text-accent">{{ .title }}</a></li>{{ end }}
+          </ul>
+          {{- else }}
+          <a href="{{ .url | relURL }}" class="block py-3 font-heading text-2xl font-semibold">{{ .title }}</a>
+          {{- end }}
+        </li>
+        {{- end }}
+      </ul>
+      <div class="relative z-10 mt-10 flex flex-wrap gap-3">
+        <a href="tel:{{ $s.phone_href }}" class="btn-accent">{{ partial "icon.html" (dict "n" "phone" "c" "h-4 w-4") }}{{ $s.phone }}</a>
+        <a href="{{ $s.whatsapp }}" class="btn-glass" target="_blank" rel="noopener">WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</header>
