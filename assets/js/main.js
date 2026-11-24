@@ -144,12 +144,12 @@
       var HEIGHTS = [[0, 0.5], [0.5, 1], [1, 3], [3, 10], [10, Infinity]];
       var ZONES = [[3, 4], [5, 5], [6, 7]];
       return {
-        cat: initialCat || 'all', heights: [], lights: [], zones: [], drawer: false, items: [], shown: 0,
+        cat: initialCat || 'all', heights: [], lights: [], zones: [], drawer: false, items: [], shown: 0, rank: [], page: 1, perPage: 24,
         init: function () {
           var self = this;
-          this.items = Array.prototype.map.call(document.querySelectorAll('[data-card]'), function (el) { return el.dataset; });
+          this.items = Array.prototype.map.call(document.querySelectorAll('[data-card]'), function (el, i) { el.dataset.i = i; return el.dataset; });
           this.recount();
-          ['cat', 'heights', 'lights', 'zones'].forEach(function (k) { self.$watch(k, function () { self.recount(); }); });
+          ['cat', 'heights', 'lights', 'zones'].forEach(function (k) { self.$watch(k, function () { self.page = 1; self.recount(); }); });
           this.$watch('drawer', function (v) { document.body.classList.toggle('overflow-hidden', v); });
         },
         get active() { return this.heights.length + this.lights.length + this.zones.length; },
@@ -171,7 +171,30 @@
           }
           return true;
         },
-        recount: function () { var self = this; this.shown = this.items.filter(function (d) { return self.ok(d); }).length; },
+        recount: function () {
+          var self = this, n = 0;
+          this.rank = this.items.map(function (d) { return self.ok(d) ? n++ : -1; });
+          this.shown = n;
+        },
+        get totalPages() { return Math.max(1, Math.ceil(this.shown / this.perPage)); },
+        vis: function (i) { var r = this.rank[i], s = (this.page - 1) * this.perPage; return r >= s && r < s + this.perPage; },
+        // Compact page list: 1 … 4 5 [6] 7 8 … 20
+        get pageList() {
+          var t = this.totalPages, c = this.page, out = [], last = 0;
+          for (var i = 1; i <= t; i++) {
+            if (i === 1 || i === t || Math.abs(i - c) <= 1 || (c <= 3 && i <= 4) || (c >= t - 2 && i >= t - 3)) {
+              if (last && i - last > 1) out.push('…');
+              out.push(i); last = i;
+            }
+          }
+          return out;
+        },
+        goPage: function (n) {
+          if (n < 1 || n > this.totalPages || n === this.page) return;
+          this.page = n;
+          var g = document.getElementById('catalog-grid');
+          if (g) g.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+        },
         reset: function () { this.heights = []; this.lights = []; this.zones = []; }
       };
     });

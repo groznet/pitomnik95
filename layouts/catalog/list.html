@@ -2,7 +2,7 @@
 {{- $nums := findRE `[0-9]+(?:\.[0-9]+)?` (.p.Params.height | default "") -}}
 {{- $hmin := "" }}{{ $hmax := "" }}{{ if $nums }}{{ $hmin = index $nums 0 }}{{ $hmax = index $nums (sub (len $nums) 1) }}{{ end -}}
 {{- $zone := findRE `[0-9]+` (.p.Params.frost_zone | default "") -}}
-<div data-card data-cat="{{ .p.Params.category }}" data-hmin="{{ $hmin }}" data-hmax="{{ $hmax }}" data-light="{{ .p.Params.light }}" data-zone="{{ with $zone }}{{ index . 0 }}{{ end }}" x-show="ok($el.dataset)" x-transition.opacity.duration.300ms>{{ partial "product-card.html" (dict "p" .p) }}</div>
+<div data-card data-cat="{{ .p.Params.category }}" data-hmin="{{ $hmin }}" data-hmax="{{ $hmax }}" data-light="{{ .p.Params.light }}" data-zone="{{ with $zone }}{{ index . 0 }}{{ end }}" x-show="vis($el.dataset.i)" x-transition.opacity.duration.300ms>{{ partial "product-card.html" (dict "p" .p) }}</div>
 {{- end -}}
 {{ define "main" }}
 {{- $s := hugo.Data.settings -}}
@@ -10,30 +10,25 @@
 {{ partial "page-hero.html" (dict "title" .Title "lead" .Params.lead "image" .Params.hero "eyebrow" (cond $isRoot "Каталог" "Каталог · категория") "alt" .Title "crumbs" (cond $isRoot (slice (dict "title" "Каталог")) (slice (dict "title" "Каталог" "url" "/catalog/") (dict "title" .Title)))) }}
 
 {{- if $isRoot }}
-<section class="sun-gradient relative overflow-hidden pb-32 pt-8" x-data="catalogFilter('all')" @keydown.escape.window="drawer = false">
+<section class="sun-gradient relative overflow-clip pb-32 pt-8" x-data="catalogFilter('all')" @keydown.escape.window="drawer = false">
   {{ partial "botanical.html" (dict "v" "fern" "c" "pointer-events-none absolute -right-16 top-0 h-[32rem] text-secondary/10 float-slow") }}
   <div class="container-x relative z-10 grid items-start gap-10 lg:grid-cols-[260px_minmax(0,1fr)]">
     <aside class="hidden max-h-[calc(100vh-7rem)] overflow-y-auto lg:sticky lg:top-24 lg:block" aria-label="Фильтры каталога">
       {{ partial "catalog-sidebar.html" (dict "root" true "cur" "") }}
     </aside>
     <div>
-      <nav class="reveal mb-6 flex flex-wrap gap-2" aria-label="Категории каталога">
-        <button type="button" @click="setCat('all')" :aria-pressed="cat === 'all'" class="rounded-full px-5 py-2 text-sm font-semibold transition" :class="cat === 'all' ? 'bg-primary text-surface' : 'bg-primary/10 text-primary hover:bg-primary/20'">Все</button>
-        {{- range hugo.Data.nav.categories }}
-        <button type="button" @click="setCat('{{ .slug }}')" :aria-pressed="cat === '{{ .slug }}'" class="rounded-full px-5 py-2 text-sm font-semibold transition" :class="cat === '{{ .slug }}' ? 'bg-primary text-surface' : 'bg-primary/10 text-primary hover:bg-primary/20'">{{ .short }}</button>
-        {{- end }}
-      </nav>
-      <p class="mb-6 text-sm text-muted" aria-live="polite">Найдено: <span x-text="shown"></span></p>
-      <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+      <div id="catalog-grid" class="grid scroll-mt-28 gap-6 sm:grid-cols-2 xl:grid-cols-3">
         {{- range $c := hugo.Data.nav.categories }}{{ with site.GetPage (printf "/catalog/%s" $c.slug) }}{{ range .RegularPages }}
         {{ template "catalog-card" (dict "p" .) }}
         {{- end }}{{ end }}{{ end }}
       </div>
+      {{ partial "catalog-pagination.html" . }}
       <div x-show="shown === 0" x-cloak class="rounded-[2rem_1rem_2rem_1rem] bg-white p-8 text-center shadow-botanical">
         <p class="font-heading text-lg text-primary">По выбранным фильтрам ничего не найдено</p>
         <button type="button" @click="reset(); setCat('all')" class="btn-soft mt-4 text-sm">Сбросить фильтры</button>
       </div>
-      <p class="mt-10 text-sm text-muted">Актуальное наличие и сорта уточняйте у менеджеров — {{ $s.phone }}.</p>
+      <p class="mt-10 text-sm text-muted" aria-live="polite">Найдено: <span x-text="shown"></span></p>
+      <p class="mt-2 text-sm text-muted">Актуальное наличие и сорта уточняйте у менеджеров — {{ $s.phone }}.</p>
     </div>
   </div>
 
@@ -52,25 +47,25 @@
 </section>
 {{- else }}
 {{- $cat := .Params.slug -}}
-<section class="sun-gradient relative overflow-hidden pb-32 pt-8" x-data="catalogFilter('{{ $cat }}')" @keydown.escape.window="drawer = false">
+<section class="sun-gradient relative overflow-clip pb-32 pt-8" x-data="catalogFilter('{{ $cat }}')" @keydown.escape.window="drawer = false">
   {{ partial "botanical.html" (dict "v" "fern" "c" "pointer-events-none absolute -right-16 top-0 h-[32rem] text-secondary/10 float-slow") }}
   <div class="container-x relative z-10 grid items-start gap-10 lg:grid-cols-[260px_minmax(0,1fr)]">
     <aside class="hidden max-h-[calc(100vh-7rem)] overflow-y-auto lg:sticky lg:top-24 lg:block" aria-label="Фильтры каталога">
       {{ partial "catalog-sidebar.html" (dict "root" false "cur" $cat) }}
     </aside>
     <div>
-
-      <p class="mb-6 text-sm text-muted" aria-live="polite">Найдено: <span x-text="shown"></span></p>
-      <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+      <div id="catalog-grid" class="grid scroll-mt-28 gap-6 sm:grid-cols-2 xl:grid-cols-3">
         {{- range .RegularPages }}
         {{ template "catalog-card" (dict "p" .) }}
         {{- end }}
       </div>
+      {{ partial "catalog-pagination.html" . }}
       <div x-show="shown === 0" x-cloak class="rounded-[2rem_1rem_2rem_1rem] bg-white p-8 text-center shadow-botanical">
         <p class="font-heading text-lg text-primary">По выбранным фильтрам ничего не найдено</p>
         <button type="button" @click="reset(); setCat('all')" class="btn-soft mt-4 text-sm">Сбросить фильтры</button>
       </div>
-      <p class="mt-10 text-sm text-muted">Актуальное наличие и сорта уточняйте у менеджеров — {{ $s.phone }}.</p>
+      <p class="mt-10 text-sm text-muted" aria-live="polite">Найдено: <span x-text="shown"></span></p>
+      <p class="mt-2 text-sm text-muted">Актуальное наличие и сорта уточняйте у менеджеров — {{ $s.phone }}.</p>
     </div>
   </div>
 

@@ -1,0 +1,15 @@
+{{- /* Client-side pagination; lives inside the catalogFilter Alpine scope */ -}}
+<nav x-show="totalPages > 1" x-cloak class="mt-12 flex flex-wrap items-center justify-center gap-2" aria-label="Страницы каталога">
+  <button type="button" @click="goPage(page - 1)" :disabled="page === 1" class="grid h-11 w-11 place-items-center rounded-full bg-white/70 text-primary ring-1 ring-primary/15 transition duration-300 hover:bg-primary hover:text-surface-light disabled:pointer-events-none disabled:opacity-40" aria-label="Предыдущая страница">
+    {{ partial "icon.html" (dict "n" "arrow" "c" "h-4 w-4 rotate-180") }}
+  </button>
+  <template x-for="(n, idx) in pageList" :key="idx">
+    <span>
+      <span x-show="n === '…'" class="grid h-11 w-8 place-items-center text-muted" aria-hidden="true">…</span>
+      <button type="button" x-show="n !== '…'" @click="goPage(n)" x-text="n" :aria-current="n === page ? 'page' : null" :aria-label="'Страница ' + n" class="grid h-11 min-w-11 place-items-center rounded-full px-3 text-sm font-semibold ring-1 transition duration-300" :class="n === page ? 'bg-primary text-surface-light ring-primary' : 'bg-white/70 text-primary ring-primary/15 hover:ring-accent'"></button>
+    </span>
+  </template>
+  <button type="button" @click="goPage(page + 1)" :disabled="page === totalPages" class="grid h-11 w-11 place-items-center rounded-full bg-white/70 text-primary ring-1 ring-primary/15 transition duration-300 hover:bg-primary hover:text-surface-light disabled:pointer-events-none disabled:opacity-40" aria-label="Следующая страница">
+    {{ partial "icon.html" (dict "n" "arrow" "c" "h-4 w-4") }}
+  </button>
+</nav>
