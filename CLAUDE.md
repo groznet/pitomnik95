@@ -1,7 +1,7 @@
 # 🌐 Pitomnik95 — Website Project 2026
 
 > **Purpose:** Single source of truth for the Pitomnik95 website. Written for the developer (Kerim @ GrozNet) and for AI assistants that generate pages, sections and code. Keep it updated as decisions change.
-> **Last updated:** 23 Nov 2026
+> **Last updated:** 24 Nov 2026
 
 ---
 
